@@ -6,6 +6,12 @@ export default function Fashion () {
   const [file, setFile] = useState(null)
   const [image, setImage] = useState(null)
   const [inputState, setInputstate] = useState(false)
+  const[data,setData]=useState(null);
+  const [mounted, setMounted]=useState(false);
+  useEffect(()=>{
+      setMounted(true);
+  },[])
+
   function handelSubmit () {
     const formData = new FormData();
     formData.append("file", file);
@@ -19,8 +25,12 @@ export default function Fashion () {
       )
       .then(res => {
         console.log(res)
+        setData(res.data)
       })
   }
+  const arrayDataItems =data?.map(url => 
+    <Card imgSrc={`${url}`}/>
+)
 
   /*const handleInput= (e)=> {
     e.preventDefault();
@@ -37,6 +47,8 @@ export default function Fashion () {
   }*/
   console.log(file)
   return (
+    mounted?(
+    <div className='flex flex-col justify-center items-center'>
     <div>
       <Navbar />
       <h1 className='flex items-center justify-center font-extrabold text-5xl mb-11'>
@@ -98,6 +110,11 @@ export default function Fashion () {
           Submit
         </button>
       </div>
-    </div>
+      </div>
+     { arrayDataItems?(<div><h1 className='text-5xl font-extrabold justify-center items-center mt-5'>Recommended Fashion</h1>
+<div className='grid grid-cols-3 gap-4 mt-10'>
+{arrayDataItems}
+</div></div>):(<div></div>)}
+    </div>):(<div>Loading</div>)
   )
 }
