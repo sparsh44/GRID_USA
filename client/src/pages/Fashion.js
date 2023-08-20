@@ -1,5 +1,6 @@
-import { Navbar } from '@/components/Navbar'
-import React, { useState } from 'react'
+import { Navbar} from '@/components/Navbar'
+import { Card} from '@/components/Card'
+import React, { useState, useEffect } from 'react'
 import axios from 'axios'
 
 export default function Fashion () {
@@ -24,28 +25,14 @@ export default function Fashion () {
         }}
       )
       .then(res => {
-        console.log(res)
+        console.log(res.data)
         setData(res.data)
       })
   }
-  const arrayDataItems =data?.map(url => 
-    <Card imgSrc={`${url}`}/>
+  const arrayDataItems = data?.map(url => 
+    <Card imgSrc={`${url.slice(2)}`}/>
+    // <Card imgSrc = "/fashionImages/images/3344.jpg"/>
 )
-
-  /*const handleInput= (e)=> {
-    e.preventDefault();
-    const formData=new FormData();
-    const img=e.target.files[0];
-    formData.append("pic", img);
-    console.log(formData);
-    setFile(img)
-    // setImage(URL.createObjectURL(file));
-    setInputstate(true)
-    console.log(img);
-    console.log(file);
-    console.log(inputState);
-  }*/
-  console.log(file)
   return (
     mounted?(
     <div className='flex flex-col justify-center items-center'>
@@ -98,7 +85,7 @@ export default function Fashion () {
                 />
               </div>
             ):
-            (<div><img alt="preview image" src={image}/></div>)
+            (<div>Uploaded</div>)
             }
           </label>
         </div>

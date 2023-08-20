@@ -5,7 +5,7 @@ import { Dropdown, Item } from 'flowbite-react';
 export const Navbar = () => {
   return (
     <div className='flex flex-row justify-start items-center'>
-        <img src='flipkart.png' className='h-32 w-42 pl-12'/>
+        <img src='/flipkart.png' className='h-32 w-42 pl-12'/>
             <div class=' flex p-4 mx-10 items-center justify-center w-8/12'>
             <div class="relative flex items-center w-full h-12 rounded-lg focus-within:shadow-lg bg-white overflow-hidden">
                 <div class="grid place-items-center h-full w-12 text-gray-300">

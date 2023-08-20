@@ -93,12 +93,12 @@ def preprocessImage(img):
     return (indices)
 
 def getRec(img):
+    print(len(filenames))
     indices = preprocessImage(img)
     response = []
-    print("HIIIII")
-    print(response)
-    for file in indices[0][1:15]:
-        response.append(file_paths[file])
+    for file in indices[0][1:11]:
+        name = file_paths[file]
+        response.append(name)
     return response
 
 def getMyProd(userId):
