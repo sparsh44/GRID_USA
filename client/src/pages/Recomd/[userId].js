@@ -1,7 +1,7 @@
 import { Navbar } from "@/components/Navbar";
 import { Recommend } from "@/components/Recommend";
 import { useRouter } from "next/router";
-import { useState } from "react";
+import { useState , useEffect} from "react";
 
 export default function Recomd(){
     const router=useRouter();
