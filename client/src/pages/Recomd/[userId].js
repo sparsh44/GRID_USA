@@ -6,18 +6,18 @@ import axios from 'axios';
 
 export default function Recomd(){
     const router=useRouter();
-    const [data, setData]=useState([]);
+    const [dataArr, setDataArr]=useState([]);
     const userId=router.query.userId;
     useEffect(()=>{
         if(router.isReady){
-            const response = axios.get('http://127.0.0.1:5000/', {
-              // data:userId,
+            const response = axios.post('http://127.0.0.1:5000/', {
+              data:userId,
               headers: {
                 'Access-Control-Allow-Origin' : '*',
               }
             }).then((res) => {
               console.log(res)
-              setData(res.data)
+              setDataArr(res.data)
             });
           }
         },[router.isReady])
@@ -25,7 +25,7 @@ export default function Recomd(){
     return(
         <div>
             <Navbar/>
-            {data?(<Recommend array={data}/>):(<div>Loading</div>)} 
+            {dataArr?(<Recommend array={dataArr}/>):(<div>Loading</div>)} 
         </div>
     )
 }

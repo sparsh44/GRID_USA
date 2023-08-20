@@ -2,6 +2,15 @@ from flask import Flask, request, jsonify, json
 from flask_cors import CORS,cross_origin
 import pandas as pd
 import numpy as np
+import pickle
+from numpy.linalg import norm
+from tensorflow.keras.preprocessing import image
+from tensorflow.keras.applications.resnet50 import preprocess_input
+from sklearn.neighbors import NearestNeighbors
+from io import BytesIO
+from PIL import Image
+import os
+import tensorflow as tf
 
 app = Flask(__name__)
 
@@ -55,15 +64,60 @@ def allRecommendations(userId):
             rec.append(list(i))
     return rec
 
+feature_list = np.array(pickle.load(open('../nn_model/embeddings.pkl','rb')))
+filenames = pickle.load(open('../nn_model/filenames.pkl','rb'))
+
+model = tf.keras.models.load_model("../nn_model/resNet.keras")
+
+to_remove = '/kaggle/input/fashion-product-images-small'
+new_filenames = [filename.replace(to_remove, '') for filename in filenames]
+file_paths = ['../fashionImages'+filename for filename in new_filenames]
+
+
+def preprocessImage(img):
+    # img = input(shape=(None, 224, 224, 3))
+    # img = img.resize((None, 224, 224, 3))
+    img_array = image.img_to_array(img)
+    expanded_img_array = np.expand_dims(img_array, axis=0)
+    preprocessed_img = preprocess_input(expanded_img_array)
+
+    result = model.predict(preprocessed_img).flatten()
+    normalized_result = result / norm(result)
+
+    neighbors = NearestNeighbors(n_neighbors=6,algorithm='brute',metric='euclidean')
+    neighbors.fit(feature_list)
+
+    distances,indices = neighbors.kneighbors([normalized_result])
+    return (indices)
+
+def getRec(img):
+    indices = preprocessImage(img)
+    response = []
+    print("HIIIII")
+    print(response)
+    for file in indices[0][1:6]:
+        response.append(file_paths[file])
+    return response
+
+
 @app.route('/',  methods = ['GET', 'POST'])
 def main():
-    return allRecommendations(6183)
+    if request.method == 'POST':
+        userId = request.json['data']
+        print(userId)
+    return allRecommendations(int(userId))
 
-@app.route('/get_predictions', methods = ['POST'])
-def get_class():
-    print("IN GET CLASS")
-    print(allRecommendations(6183))
+@app.route('/getFashion', methods = ['POST'])
+def getFashion():
+    file = request.files['file']
+    # img = image.load_img(file,target_size=(224,224))
+    img = Image.open(file)
+    desired_shape=(224, 224)
+    resized_img=img.resize(desired_shape, Image.ANTIALIAS)
+    filesPath = getRec(resized_img)
+    return filesPath
+
 
 if __name__=='__main__':  
-    print(allRecommendations(100))
+    # print(allRecommendations(100))
     app.run(debug=True, port ='5000')
