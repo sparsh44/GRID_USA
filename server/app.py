@@ -44,10 +44,12 @@ def getRecommendations(userId):
             prodName = df6[df6['product_id'] == p]['product_name'].unique()[0]
             category = df6[df6['product_id'] == p]['category'].unique()[0]
             imgLink = df6[df6['product_id'] == p]['img_link'].unique()[0]
-            if [prodName, imgLink] not in recommendations:
-                recommendations.append([prodName, imgLink])
             if category not in categories:
                 categories.append(category)
+            if [prodName, imgLink] not in recommendations:
+                if p in myProd:
+                    continue
+                recommendations.append([prodName, imgLink])
             
     return recommendations,categories
 
@@ -95,22 +97,32 @@ def getRec(img):
     response = []
     print("HIIIII")
     print(response)
-    for file in indices[0][1:6]:
+    for file in indices[0][1:15]:
         response.append(file_paths[file])
     return response
 
+def getMyProd(userId):
+    myProd = user_product[userId]
+    purchaseHistory = []
+    for p in myProd:
+        #if given product is already bought by user then dont recommend
+        prodName = df6[df6['product_id'] == p]['product_name'].unique()[0]
+        imgLink = df6[df6['product_id'] == p]['img_link'].unique()[0]
+        purchaseHistory.append([prodName, imgLink])
+    return purchaseHistory
 
 @app.route('/',  methods = ['GET', 'POST'])
 def main():
-    if request.method == 'POST':
-        userId = request.json['data']
-        print(userId)
-    return allRecommendations(int(userId))
+    userId = request.json['data']
+    print(userId)
+    rec = allRecommendations(int(userId))
+    print(rec)
+    history = getMyProd(int(userId))
+    return [rec, history]
 
 @app.route('/getFashion', methods = ['POST'])
 def getFashion():
     file = request.files['file']
-    # img = image.load_img(file,target_size=(224,224))
     img = Image.open(file)
     desired_shape=(224, 224)
     resized_img=img.resize(desired_shape, Image.ANTIALIAS)
@@ -119,5 +131,4 @@ def getFashion():
 
 
 if __name__=='__main__':  
-    # print(allRecommendations(100))
     app.run(debug=True, port ='5000')
