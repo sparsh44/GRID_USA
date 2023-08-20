@@ -14,8 +14,8 @@ export const Recommend = (props) => {
         setMounted(true);
     },[])
     // replace products with props.array
-    const arrayDataItems = products?.map(product => 
-       <li className='my-5'> <Product title={`${product.title}`} desc={`${product.desc}`} img={`${product.img}`}/></li>
+    const arrayDataItems = props.array?.map(product => 
+       <li className='my-5'> <Product title={`${product[0]}`} img={`${product[1]}`}/></li>
       )
   return (
     mounted?(
