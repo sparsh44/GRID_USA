@@ -22,7 +22,8 @@ export const Recommend = (props) => {
     <div className='flex flex-col justify-center items-center'>
         <h1 className='flex items-center justify-center font-extrabold text-5xl'> Recommended Products</h1>
         <div className='mt-10'>
-             <ul>{arrayDataItems}</ul>
+        {arrayDataItems?(<ul>{arrayDataItems}</ul>):(<div>Loading</div>)}
+             
         </div>
 
     </div>
