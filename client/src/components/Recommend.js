@@ -14,15 +14,16 @@ export const Recommend = (props) => {
         setMounted(true);
     },[])
     // replace products with props.array
-    const arrayDataItems = products?.map(product => 
-       <li className='my-5'> <Product title={`${product.title}`} desc={`${product.desc}`} img={`${product.img}`}/></li>
+    const arrayDataItems = props.array?.map(product => 
+       <li className='my-5'> <Product title={`${product[0]}`} img={`${product[1]}`}/></li>
       )
   return (
     mounted?(
     <div className='flex flex-col justify-center items-center'>
         <h1 className='flex items-center justify-center font-extrabold text-5xl'> Recommended Products</h1>
         <div className='mt-10'>
-             <ul>{arrayDataItems}</ul>
+        {arrayDataItems?(<ul>{arrayDataItems}</ul>):(<div>Loading</div>)}
+             
         </div>
 
     </div>

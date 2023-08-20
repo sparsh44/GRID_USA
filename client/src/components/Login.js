@@ -6,20 +6,9 @@ export const Login = () => {
     const router=useRouter();
     const handleClick=()=>{
         e.preventDefault();
-        fetch("Write server name",{
-          method:"POST",
-          headers:{
-            "Content-Type":"application/json"
-          },
-          body:JSON.stringify({
-            userId:userId
-          })
-        }).then((res)=>
+       
           router.push(`/Recomd/${userId}`)
-        ).catch((error)=>{
-          alert("Error")
-          console.log(error);
-        })
+        
     }
   return (
     <div className='flex flex-col justify-center items-center'>

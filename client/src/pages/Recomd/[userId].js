@@ -17,7 +17,7 @@ export default function Recomd(){
               }
             }).then((res) => {
               console.log(res)
-              setData(res)
+              setData(res.data)
             });
           }
         },[router.isReady])
@@ -25,7 +25,7 @@ export default function Recomd(){
     return(
         <div>
             <Navbar/>
-            {/* <Recommend array={data}/>  */}
+            {data?(<Recommend array={data}/>):(<div>Loading</div>)} 
         </div>
     )
 }
