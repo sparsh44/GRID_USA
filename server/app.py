@@ -8,9 +8,9 @@ app = Flask(__name__)
 cors = CORS(app, resources={r"/*": {"origins": "*"}})
 app.config['CORS_HEADERS'] = 'Content-Type'
 
-df6 = pd.read_csv("./dataset/df6.csv")
-df8 = pd.read_csv("./dataset/df8.csv")
-similar_user = pd.read_csv("./dataset/similar_user.csv")
+df6 = pd.read_csv("../dataset/df6.csv")
+df8 = pd.read_csv("../dataset/df8.csv")
+similar_user = pd.read_csv("../dataset/similar_user.csv")
 similar_user = similar_user.to_numpy()
 
 user_product = df6.groupby('userID')['product_id'].agg(list)
@@ -55,9 +55,9 @@ def allRecommendations(userId):
             rec.append(list(i))
     return rec
 
-@app.route('/')
+@app.route('/',  methods = ['GET', 'POST'])
 def main():
-    return allRecommendations(100)
+    return allRecommendations(6183)
 
 @app.route('/get_predictions', methods = ['POST'])
 def get_class():
